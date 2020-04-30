@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "729068733961",
+    "firebase_url": "https://basique-forum.firebaseio.com",
+    "project_id": "basique-forum",
+    "storage_bucket": "basique-forum.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:729068733961:android:505461a4a926ff9e25dad8",
+        "android_client_info": {
+          "package_name": "com.example.basiqueforum"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "729068733961-63bptuebqilui8408313gvqesjrhbsk2.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.basiqueforum",
+            "certificate_hash": "fcf157cee3db09b7815cbf534861334ab086c9df"
+          }
+        },
+        {
+          "client_id": "729068733961-m1vppslndugvsn9spd11enph291nde85.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBHCvZ45ArZYA80Gk81K-g_FRfnQ-t987k"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "729068733961-m1vppslndugvsn9spd11enph291nde85.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
