@@ -1,5 +1,6 @@
 package com.example.basiqueforum;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -13,7 +14,11 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -23,6 +28,7 @@ import java.util.Random;
 public class PostActivity extends AppCompatActivity {
 
     private StorageReference mStorage;
+    private DatabaseReference mDatabase;
 
     private ProgressDialog mProgressDialog;
 
@@ -41,7 +47,8 @@ public class PostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
-        mStorage = FirebaseStorage.getInstance().getReference();
+        mStorage = FirebaseStorage.getInstance().getReference().child("Blog_Image");
+        mDatabase = FirebaseDatabase.getInstance().getReference().child("Blog");
 
         mProgressDialog = new ProgressDialog(this);
 
@@ -66,18 +73,27 @@ public class PostActivity extends AppCompatActivity {
                 mProgressDialog.setMessage("Upload...");
                 mProgressDialog.show();
 
-                String title = mTitle.getText().toString().trim();
-                String ctn = mContent.getText().toString().trim();
+                final String title = mTitle.getText().toString().trim();
+                final String ctn = mContent.getText().toString().trim();
 
-                if (TextUtils.isEmpty(title)) {
-                    StorageReference filepath = mStorage.child("Blog_Image").child(random());
-                    filepath.putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                if (title != "") {
+                    final StorageReference filepath = mStorage.child(random());
+
+                    filepath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            mProgressDialog.dismiss();
+                        public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+                            if (task.isSuccessful()) {
+                                DatabaseReference newPost = mDatabase.push();
+                                newPost.child("title").setValue(title);
+                                newPost.child("ctn").setValue(ctn);
+                                newPost.child("img").setValue(task.getResult().toString());
+                                //Add UserID FirebaseAuth.getCurrentuser().getUID();
+                            }
                         }
                     });
                 }
+                mProgressDialog.dismiss();
+                startActivity(new Intent(PostActivity.this, MainActivity.class));
             }
         });
 
