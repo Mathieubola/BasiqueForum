@@ -78,16 +78,20 @@ public class PostActivity extends AppCompatActivity {
 
                 if (title != "") {
                     final StorageReference filepath = mStorage.child(random());
-
                     filepath.putFile(imageUri).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                         @Override
                         public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                             if (task.isSuccessful()) {
-                                DatabaseReference newPost = mDatabase.push();
-                                newPost.child("title").setValue(title);
-                                newPost.child("ctn").setValue(ctn);
-                                newPost.child("img").setValue(task.getResult().toString());
-                                //Add UserID FirebaseAuth.getCurrentuser().getUID();
+                                filepath.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                                    @Override
+                                    public void onSuccess(Uri uri) {
+                                        DatabaseReference newPost = mDatabase.push();
+                                        newPost.child("title").setValue(title);
+                                        newPost.child("ctn").setValue(ctn);
+                                        newPost.child("img").setValue(uri.toString());
+                                        //Add UserID FirebaseAuth.getCurrentuser().getUID();
+                                    }
+                                });
                             }
                         }
                     });

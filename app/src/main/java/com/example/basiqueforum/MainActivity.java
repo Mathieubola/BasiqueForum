@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,6 +13,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +24,7 @@ import com.firebase.ui.database.SnapshotParser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.squareup.picasso.Picasso;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -82,12 +85,14 @@ public class MainActivity extends AppCompatActivity {
         LinearLayout root;
         TextView txtTitle;
         TextView txtDesc;
+        ImageView postImage;
 
         ViewHolder(View itemView) {
             super(itemView);
             root = itemView.findViewById(R.id.list_root);
             txtTitle = itemView.findViewById(R.id.title);
             txtDesc = itemView.findViewById(R.id.ctn);
+            postImage = (ImageView) itemView.findViewById(R.id.img);
         }
 
         void setTxtTitle(String string) {
@@ -97,6 +102,10 @@ public class MainActivity extends AppCompatActivity {
 
         void setTxtDesc(String string) {
             txtDesc.setText(string);
+        }
+
+        void setImage(Context ctx, String string) {
+            Picasso.get().load(string).into(postImage);
         }
     }
 
@@ -130,6 +139,7 @@ public class MainActivity extends AppCompatActivity {
             protected void onBindViewHolder(@NonNull ViewHolder holder, final int position, @NonNull Model model) {
                 holder.setTxtTitle(model.getTitle());
                 holder.setTxtDesc(model.getCtn());
+                holder.setImage(getApplicationContext(), model.getImg());
 
                 holder.root.setOnClickListener(new View.OnClickListener() {
                     @Override
